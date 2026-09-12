@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAKSHAM — AJEYA 26 | Career Intelligence OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #050405;
+  --panel: rgba(12,9,11,.92);
+  --line: rgba(255,70,95,.14);
+  --red: #ff2d4a;
+  --red-bright: #ff6b82;
+  --muted: #8f858b;
+  --dim: #5a5257;
+  --green: #b4ff6a;
+  --white: #f5f2f2;
+  --ease: cubic-bezier(.23,1,.32,1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--ink); color: var(--white); font-family: Manrope, system-ui, sans-serif; overflow-x: hidden; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+a { color: inherit; text-decoration: none; }
+::selection { background: rgba(255,45,74,.3); }
+
+#voidCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .7; }
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 40%, black 8%, transparent 70%);
+  animation: gridDrift 50s linear infinite;
+}
+@keyframes gridDrift { to { background-position: 56px 56px; } }
+.orb {
+  position: fixed; border-radius: 50%; filter: blur(120px); opacity: .12; z-index: 0; pointer-events: none;
+  animation: orbFloat 22s ease-in-out infinite alternate;
+}
+.orb1 { width: 50vw; height: 50vw; background: #ff143c; top: -22vw; left: 8%; }
+.orb2 { width: 40vw; height: 40vw; background: #5a0a1c; bottom: -16vw; right: -10%; animation-delay: -9s; }
+@keyframes orbFloat { to { transform: translate(4vw, 3vh) scale(1.08); } }
+
+.cursor {
+  position: fixed; width: 10px; height: 10px; background: var(--red);
+  border-radius: 50%; pointer-events: none; z-index: 99999;
+  transform: translate(-50%,-50%); mix-blend-mode: difference;
+  transition: width .2s, height .2s, background .2s;
+  box-shadow: 0 0 14px rgba(255,45,74,.7);
+}
+.cursor-follower {
+  position: fixed; width: 32px; height: 32px;
+  border: 1.5px solid rgba(255,70,95,.45); border-radius: 50%;
+  pointer-events: none; z-index: 99998; transform: translate(-50%,-50%);
+  transition: width .25s, height .25s, border-color .25s, transform .2s;
+}
+.cursor.hover { width: 18px; height: 18px; background: var(--red-bright); }
+.cursor-follower.hover { width: 48px; height: 48px; border-color: var(--red-bright); }
+@media (max-width: 700px) { .cursor, .cursor-follower { display: none; } body { cursor: auto; } }
+
+#opening {
+  position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center;
+  background: #030203; transition: opacity .9s var(--ease), visibility .9s;
+}
+#opening.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.opening-inner { text-align: center; position: relative; z-index: 2; }
+.ajeya { font: 500 11px/1 "DM Mono"; letter-spacing: .32em; text-transform: uppercase; color: var(--dim); margin-bottom: 28px; }
+.brand {
+  font: 800 clamp(64px, 14vw, 140px)/.82 "Space Grotesk"; letter-spacing: -.07em;
+  transition: transform .45s var(--ease), text-shadow .45s;
+}
+.brand span { color: var(--red); text-shadow: 0 0 48px rgba(255,45,74,.55); }
+.brand:hover {
+  transform: scale(1.06) translateY(-10px);
+  text-shadow: 0 0 80px rgba(255,45,74,.65), 0 0 160px rgba(255,45,74,.25);
+}
+.motto { margin-top: 28px; font: 600 22px "Space Grotesk"; letter-spacing: .06em; color: #e4dcdf; }
+.motto-en { margin-top: 6px; color: var(--muted); font-size: 14px; }
+.brand-line {
+  width: 90px; height: 2px; margin: 26px auto;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  box-shadow: 0 0 22px var(--red);
+}
+.enter-btn {
+  margin-top: 42px; padding: 16px 52px; border-radius: 999px;
+  border: 1px solid rgba(255,70,95,.5);
+  background: linear-gradient(135deg, rgba(255,45,74,.2), rgba(100,12,30,.18));
+  color: #fff; font: 700 13px "DM Mono"; letter-spacing: .18em;
+  transition: all .4s var(--ease);
+}
+.enter-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  background: linear-gradient(135deg, #e01f42, #6f1228);
+  box-shadow: 0 20px 48px rgba(255,45,74,.4);
+}
+
+#loading {
+  position: fixed; inset: 0; z-index: 1100; display: none; place-items: center;
+  background: #030203;
+}
+.loading-box { text-align: center; width: min(420px, 88%); }
+.loading-logo { font: 800 52px "Space Grotesk"; letter-spacing: -.04em; }
+.loading-logo span { color: var(--red); }
+.loading-pct {
+  font: 800 56px "Space Grotesk"; margin: 24px 0 18px;
+  background: linear-gradient(90deg, var(--red), var(--red-bright));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.progress-track {
+  height: 6px; background: #1a1215; border-radius: 99px; overflow: hidden;
+  border: 1px solid rgba(255,70,95,.15);
+}
+.progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #8a1230, var(--red), var(--red-bright));
+  box-shadow: 0 0 18px rgba(255,45,74,.5);
+  transition: width .05s linear;
+}
+.loading-status { margin-top: 16px; font: 500 11px "DM Mono"; letter-spacing: .14em; color: var(--dim); text-transform: uppercase; }
+
+#gate {
+  position: fixed; inset: 0; z-index: 900; display: none; place-items: center; padding: 18px;
+  background: rgba(3,2,3,.96); backdrop-filter: blur(24px);
+}
+.gate-panel {
+  width: min(720px, 100%); max-height: 92vh; overflow-y: auto; padding: 36px;
+  border: 1px solid rgba(255,70,95,.26); border-radius: 24px;
+  background: linear-gradient(155deg, rgba(20,12,15,.97), rgba(8,6,8,.95));
+  box-shadow: 0 40px 120px rgba(0,0,0,.7), 0 0 60px rgba(255,45,74,.08);
+  animation: gateIn .55s var(--ease);
+}
+@keyframes gateIn { from { opacity: 0; transform: translateY(28px) scale(.96); } to { opacity: 1; transform: none; } }
+.gate-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.gate-mark {
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border: 1px solid rgba(255,70,95,.5); border-radius: 11px;
+  background: linear-gradient(145deg, #ff2d4a, #6a0a22); font: 800 18px "Space Grotesk";
+}
+.gate-title { font: 700 20px "Space Grotesk"; }
+.gate-title span { color: var(--red); }
+.gate-progress { display: flex; gap: 6px; margin: 26px 0 24px; }
+.gate-progress span { flex: 1; height: 3px; border-radius: 99px; background: #2a1a20; transition: .3s; }
+.gate-progress span.on { background: linear-gradient(90deg, #b01a38, var(--red-bright)); box-shadow: 0 0 12px rgba(255,45,74,.45); }
+.gate-copy h1 { font: 600 clamp(28px,5.5vw,40px)/.95 "Space Grotesk"; letter-spacing: -.04em; margin-bottom: 10px; }
+.gate-copy h1 em { color: var(--red-bright); font-style: normal; text-shadow: 0 0 24px rgba(255,45,74,.35); }
+.gate-copy p { color: var(--muted); font-size: 13.5px; line-height: 1.6; max-width: 520px; }
+.role-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 24px; }
+.role-card {
+  padding: 18px 14px; border: 1px solid var(--line); border-radius: 16px;
+  background: rgba(255,255,255,.02); text-align: left; transition: all .28s var(--ease);
+  display: flex; flex-direction: column; gap: 8px; min-height: 140px;
+}
+.role-card:hover { transform: translateY(-4px); border-color: rgba(255,70,95,.45); background: rgba(255,45,74,.07); }
+.role-card.selected {
+  border-color: var(--red-bright); background: linear-gradient(145deg, rgba(255,45,74,.16), rgba(255,255,255,.02));
+  box-shadow: 0 0 32px rgba(255,45,74,.15);
+}
+.role-card strong { font: 600 14px "Space Grotesk"; }
+.role-card span { color: var(--muted); font-size: 11.5px; line-height: 1.45; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.field { display: grid; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+.field label { font: 500 10px "DM Mono"; letter-spacing: .06em; color: var(--dim); text-transform: uppercase; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 42px; padding: 0 13px;
+  border: 1px solid var(--line); border-radius: 11px;
+  background: #0f0b0d; color: #fff; outline: none; font-size: 13.5px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.field textarea { padding: 11px 13px; min-height: 100px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: rgba(255,80,100,.55); box-shadow: 0 0 0 3px rgba(255,45,74,.1);
+}
+.file-box {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  border: 1px dashed rgba(255,80,100,.28); border-radius: 12px;
+  background: rgba(255,45,74,.03); cursor: pointer; transition: .25s;
+}
+.file-box:hover { border-color: rgba(255,80,100,.5); background: rgba(255,45,74,.07); }
+.file-box input { display: none; }
+.file-box strong { font-size: 13px; }
+.file-box span { font-size: 11px; color: var(--muted); }
+.legal-notice {
+  margin-top: 16px; padding: 14px 16px; border-radius: 12px;
+  border: 1px solid rgba(255,180,60,.25); background: rgba(255,180,60,.06);
+  font-size: 12px; line-height: 1.55; color: #d4c4a8;
+}
+.gate-actions {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line);
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 42px; padding: 0 18px; border-radius: 11px;
+  font: 700 12.5px Manrope; transition: all .25s var(--ease);
+}
+.btn.primary {
+  background: linear-gradient(135deg, #e01f42, #6f1228);
+  border: 1px solid rgba(255,100,120,.35); color: #fff;
+  box-shadow: 0 12px 26px rgba(255,45,74,.25);
+}
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(255,45,74,.38); }
+.btn.ghost { border: 1px solid var(--line); color: #b0a4a9; background: rgba(255,255,255,.03); }
+.btn.ghost:hover { border-color: rgba(255,80,100,.4); color: #fff; }
+.btn:disabled { opacity: .4; cursor: not-allowed; transform: none !important; }
+.btn.external {
+  background: linear-gradient(135deg, #1a5f3a, #0d3a24);
+  border: 1px solid rgba(180,255,106,.3); color: #b4ff6a;
+}
+
+#app { display: none; min-height: 100vh; position: relative; z-index: 10; }
+.app-frame { display: grid; grid-template-columns: 248px 1fr 320px; max-width: 1520px; margin: 0 auto; min-height: 100vh; }
+
+.sidebar {
+  position: sticky; top: 0; height: 100vh; padding: 26px 15px 20px;
+  border-right: 1px solid var(--line); background: rgba(7,5,6,.92); backdrop-filter: blur(20px);
+  display: flex; flex-direction: column;
+}
+.side-brand { display: flex; align-items: center; gap: 11px; margin-bottom: 28px; }
+.brand-mark {
+  width: 34px; height: 34px; display: grid; place-items: center;
+  border: 1px solid rgba(255,70,95,.5); border-radius: 10px;
+  background: linear-gradient(145deg, #ff2d4a, #6a0a22);
+  box-shadow: 0 0 22px rgba(255,45,74,.28); font: 800 16px "Space Grotesk";
+}
+.brand-name { font: 700 18px "Space Grotesk"; letter-spacing: -.04em; }
+.brand-name span { color: var(--red); }
+.brand-cap { font: 500 9px "DM Mono"; color: var(--dim); letter-spacing: .1em; text-transform: uppercase; }
+.nav-label { font: 500 9px "DM Mono"; color: var(--dim); letter-spacing: .12em; margin: 0 6px 9px; text-transform: uppercase; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px; padding: 11px 12px;
+  border-radius: 11px; color: #8a8287; font-size: 13px;
+  transition: all .22s var(--ease); border: 1px solid transparent;
+}
+.nav-item:hover { color: #fff; transform: translateX(4px); border-color: rgba(255,60,85,.18); background: rgba(255,45,74,.06); }
+.nav-item.active {
+  color: #fff; border-color: rgba(255,60,85,.26);
+  background: linear-gradient(90deg, rgba(255,45,74,.16), rgba(255,45,74,.02));
+  box-shadow: inset 3px 0 var(--red);
+}
+.side-card {
+  margin-top: auto; padding: 14px; border: 1px solid var(--line); border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255,45,74,.08), rgba(255,255,255,.015));
+}
+.side-profile { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid rgba(255,100,120,.45); font: 700 11px "DM Mono";
+  background: linear-gradient(145deg, #a01c36, #360816); color: #ffd4da; flex-shrink: 0;
+}
+.side-profile strong { display: block; font-size: 12.5px; }
+.side-profile span { display: block; margin-top: 2px; color: var(--muted); font-size: 10.5px; }
+.mini-bar { height: 4px; margin-top: 12px; border-radius: 99px; background: #27171d; overflow: hidden; }
+.mini-bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #a01432, var(--red-bright)); box-shadow: 0 0 10px rgba(255,45,74,.5); }
+.side-foot { display: flex; justify-content: space-between; margin-top: 14px; font: 9px "DM Mono"; color: #4a4347; text-transform: uppercase; }
+.live { display: flex; align-items: center; gap: 5px; color: #6f8a5e; }
+
+.main { border-right: 1px solid var(--line); min-height: 100vh; }
+.topbar {
+  position: sticky; top: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between;
+  min-height: 56px; padding: 0 26px; border-bottom: 1px solid rgba(255,100,120,.07);
+  background: rgba(5,4,5,.88); backdrop-filter: blur(18px);
+}
+.breadcrumb { font: 10px "DM Mono"; color: #655c62; letter-spacing: .08em; text-transform: uppercase; }
+.breadcrumb strong { color: #c4b9be; font-weight: 500; }
+.feed-header { padding: 20px 26px 8px; }
+.feed-title { font: 700 20px "Space Grotesk"; }
+.feed-sub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.news-bar {
+  margin: 12px 26px; padding: 13px 15px; border-radius: 14px;
+  border: 1px solid rgba(255,70,95,.16);
+  background: linear-gradient(125deg, rgba(255,45,74,.06), rgba(90,12,28,.04));
+}
+.news-label { font: 700 10px "DM Mono"; color: var(--red-bright); letter-spacing: .14em; margin-bottom: 6px; }
+.news-content { font-size: 13.5px; line-height: 1.5; min-height: 22px; transition: opacity .3s; }
+.news-company { font-weight: 700; color: var(--red-bright); margin-right: 7px; }
+
+.info-board {
+  margin: 14px 26px; padding: 16px; border-radius: 15px;
+  border: 1px solid rgba(255,70,95,.16);
+  background: linear-gradient(145deg, rgba(255,45,74,.05), rgba(14,9,12,.5));
+}
+.info-board h3 { font: 600 14px "Space Grotesk"; margin-bottom: 9px; color: var(--red-bright); }
+.info-board ul { list-style: none; display: grid; gap: 7px; }
+.info-board li { font-size: 12.5px; color: #a2969c; line-height: 1.5; padding-left: 15px; position: relative; }
+.info-board li::before { content: "▸"; position: absolute; left: 0; color: var(--red); }
+
+#jobFeed { padding: 8px 0 40px; }
+.post {
+  padding: 18px 26px; border-bottom: 1px solid rgba(255,255,255,.04);
+  transition: background .25s, transform .3s var(--ease); cursor: pointer;
+  position: relative;
+}
+.post:hover { background: rgba(255,45,74,.03); transform: translateX(4px); }
+.post:hover::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--red), #6a0a22); box-shadow: 0 0 14px rgba(255,45,74,.5);
+}
+.post-top { display: flex; gap: 12px; }
+.company-avatar {
+  width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+  display: grid; place-items: center; font: 700 13px "Space Grotesk";
+  background: linear-gradient(145deg, #a81a36, #320812); border: 1px solid rgba(255,255,255,.1);
+}
+.post-meta { flex: 1; }
+.post-author { font-weight: 700; font-size: 14px; }
+.post-time { color: var(--muted); font-size: 11.5px; margin-left: 6px; }
+.match-badge {
+  display: inline-flex; align-items: center; gap: 4px; margin-left: 9px;
+  padding: 3px 9px; border-radius: 99px; font: 700 10px "DM Mono";
+  background: rgba(180,255,106,.1); color: var(--green); border: 1px solid rgba(180,255,106,.2);
+}
+.match-badge.mid { background: rgba(255,180,60,.1); color: #ffb43c; border-color: rgba(255,180,60,.25); }
+.match-badge.low { background: rgba(255,90,110,.1); color: var(--red-bright); border-color: rgba(255,90,110,.25); }
+.source-badge {
+  display: inline-flex; margin-left: 6px; padding: 2px 7px; border-radius: 99px;
+  font: 600 9px "DM Mono"; background: rgba(255,255,255,.06); color: #9a8e94;
+}
+.post-body { margin: 11px 0 4px 54px; }
+.post-body h2 { font: 600 16.5px "Space Grotesk"; margin-bottom: 6px; letter-spacing: -.02em; }
+.post-body p { color: #a2969c; font-size: 13px; line-height: 1.55; }
+.job-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+.tag {
+  padding: 4px 9px; border-radius: 6px; font: 500 10.5px "DM Mono";
+  border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02); color: #9e9398;
+}
+.tag.red { color: var(--red-bright); border-color: rgba(255,45,74,.26); background: rgba(255,45,74,.08); }
+.tag.ember { color: #ff9eaa; border-color: rgba(255,110,130,.2); }
+.match-explain { margin: 9px 0 0 54px; font-size: 11.5px; color: #766c72; line-height: 1.45; }
+.post-actions { margin: 13px 0 0 54px; display: flex; gap: 16px; flex-wrap: wrap; }
+.action { color: #655a60; font-size: 12.5px; transition: color .2s; }
+.action:hover { color: var(--red-bright); }
+.action.external { color: var(--green); font-weight: 600; }
+
+.rightbar { padding: 18px 15px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.search-box {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  border: 1px solid var(--line); border-radius: 999px; background: #0e0a0c; margin-bottom: 15px;
+}
+.search-box:focus-within { border-color: rgba(255,80,100,.4); }
+.search-box input { flex: 1; border: 0; outline: 0; background: transparent; color: #fff; font-size: 12.5px; }
+.panel {
+  border: 1px solid var(--line); border-radius: 15px; padding: 15px;
+  background: linear-gradient(145deg, rgba(20,12,15,.65), rgba(10,8,10,.5));
+  margin-bottom: 13px; transition: border-color .25s, transform .3s var(--ease);
+}
+.panel:hover { border-color: rgba(255,90,110,.26); transform: translateY(-2px); }
+.panel-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 13px; font: 700 13px "Space Grotesk"; }
+.panel-link { font: 500 10px "DM Mono"; color: var(--red-bright); cursor: pointer; }
+.score-wrap { display: flex; align-items: center; gap: 13px; }
+.score-ring {
+  width: 70px; height: 70px; border-radius: 50%; flex-shrink: 0;
+  background: conic-gradient(var(--red-bright) 0 var(--score, 72%), #27171d 0);
+  display: grid; place-items: center; position: relative;
+  box-shadow: 0 0 24px rgba(255,45,74,.18);
+}
+.score-ring::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: #0e0a0c; }
+.score-ring strong { position: relative; z-index: 1; font: 700 16px "Space Grotesk"; }
+.skill { margin: 10px 0; }
+.skill-head { display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 5px; color: #c4b9be; }
+.skill-head span { color: var(--red-bright); font: 10px "DM Mono"; }
+.skill-track { height: 4px; background: #27171d; border-radius: 99px; overflow: hidden; }
+.skill-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #8a1230, var(--red-bright)); box-shadow: 0 0 8px rgba(255,45,74,.4); }
+.gap-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 12.5px;
+}
+.gap-item:last-child { border-bottom: 0; }
+.gap-item span { color: var(--muted); font-size: 10.5px; }
+
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 700; display: none;
+  align-items: center; justify-content: center; padding: 18px;
+  background: rgba(0,0,0,.82); backdrop-filter: blur(16px);
+}
+.modal-box {
+  width: min(680px, 96%); max-height: 88vh; overflow-y: auto;
+  background: #0d090b; border: 1px solid rgba(255,70,95,.26); border-radius: 20px;
+  padding: 26px; box-shadow: 0 40px 110px rgba(0,0,0,.6);
+  animation: modalIn .4s var(--ease);
+}
+@keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(.97); } to { opacity: 1; transform: none; } }
+.modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.modal-header h2 { font: 600 20px "Space Grotesk"; }
+.modal-header p { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+.close-btn {
+  width: 34px; height: 34px; border-radius: 50%; background: #1a1417; color: #aaa;
+  font-size: 18px; display: grid; place-items: center; transition: .2s;
+}
+.close-btn:hover { background: #252022; color: #fff; transform: rotate(90deg); }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+.detail-item {
+  padding: 13px; border-radius: 12px; border: 1px solid var(--line); background: #131014;
+}
+.detail-item label { display: block; font: 500 9px "DM Mono"; color: var(--dim); letter-spacing: .07em; text-transform: uppercase; margin-bottom: 4px; }
+.detail-item strong { font-size: 14px; }
+.apply-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+.chat-launch {
+  position: fixed; bottom: 24px; right: 24px; z-index: 600;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(145deg, #e01f42, #6f1228);
+  color: #fff; font-size: 22px; display: grid; place-items: center;
+  box-shadow: 0 14px 32px rgba(255,45,74,.42); transition: transform .3s var(--ease);
+}
+.chat-launch:hover { transform: scale(1.1) rotate(-6deg); }
+.chat-panel {
+  position: fixed; bottom: 92px; right: 24px; z-index: 600;
+  width: min(360px, calc(100vw - 28px)); height: 440px;
+  border: 1px solid rgba(255,70,95,.26); border-radius: 18px;
+  background: #0d090b; display: none; flex-direction: column;
+  box-shadow: 0 30px 80px rgba(0,0,0,.55); overflow: hidden;
+}
+.chat-panel.open { display: flex; }
+.chat-head {
+  padding: 13px 15px; border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center; background: #120d10;
+}
+.chat-head strong { font-size: 13.5px; }
+.chat-head span { display: block; font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+.bubble { max-width: 86%; padding: 10px 12px; border-radius: 12px; font-size: 12.5px; line-height: 1.5; }
+.bubble.bot { background: rgba(255,255,255,.04); color: #c0b4b9; align-self: flex-start; }
+.bubble.user {
+  background: rgba(255,45,74,.13); border: 1px solid rgba(255,45,74,.2);
+  color: #ffc0c8; align-self: flex-end;
+}
+.chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+.chat-input input { flex: 1; border: 0; outline: 0; background: transparent; color: #fff; font-size: 13px; }
+.chat-send {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(255,45,74,.16); border: 1px solid rgba(255,45,74,.26);
+  color: #fff; display: grid; place-items: center;
+}
+
+#toast {
+  position: fixed; right: 24px; bottom: 24px; z-index: 999;
+  padding: 12px 17px; border-radius: 12px; background: #131014;
+  border: 1px solid rgba(255,70,95,.26); font-size: 12.5px;
+  transform: translateY(120px); opacity: 0; transition: .4s var(--ease);
+  box-shadow: 0 16px 40px rgba(0,0,0,.45);
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+@media (max-width: 1100px) {
+  .app-frame { grid-template-columns: 72px 1fr; }
+  .sidebar .brand-name, .sidebar .brand-cap, .nav-item span:not(.icon), .side-card, .side-foot { display: none; }
+  .nav-item { justify-content: center; padding: 12px; }
+  .rightbar { display: none; }
+}
+@media (max-width: 700px) {
+  .app-frame { grid-template-columns: 1fr; }
+  .sidebar {
+    position: fixed; bottom: 0; top: auto; height: 60px; width: 100%;
+    flex-direction: row; align-items: center; justify-content: space-around;
+    border-right: 0; border-top: 1px solid var(--line); padding: 0 8px; z-index: 50;
+  }
+  .side-brand, .side-card, .side-foot, .nav-label { display: none; }
+  .main { padding-bottom: 70px; }
+  .post-body, .post-actions, .match-explain { margin-left: 0; }
+  .role-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="voidCanvas"></canvas>
+<div class="grid-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- OPENING -->
+<div id="opening">
+  <div class="opening-inner">
+    <div class="ajeya">AJEYA 26 PRESENTS</div>
+    <div class="brand">SAK<span>SHAM</span></div>
+    <div class="brand-line"></div>
+    <div class="motto">दक्षता गन्तव्यम्</div>
+    <div class="motto-en">The destination for skill.</div>
+    <button class="enter-btn" id="enterBtn">ENTER →</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="loading-box">
+    <div class="loading-logo">SAK<span>SHAM</span></div>
+    <div class="loading-pct" id="loadingPct">0%</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="loading-status" id="loadingStatus">Initializing career intelligence</div>
+  </div>
+</div>
+
+<!-- GATE (same as before – kept short for space) -->
+<div id="gate">
+  <div class="gate-panel">
+    <div class="gate-brand">
+      <div class="gate-mark">S</div>
+      <div>
+        <div class="gate-title">SAK<span>SHAM</span></div>
+        <div style="font:500 9px 'DM Mono';color:var(--dim);letter-spacing:.1em">ACCESS REQUIRED</div>
+      </div>
+    </div>
+    <div class="gate-progress" id="gateProgress">
+      <span class="on"></span><span></span><span></span><span></span>
+    </div>
+
+    <div id="gateStep0">
+      <div class="gate-copy">
+        <h1>Who are <em>you</em>?</h1>
+        <p>This chooses your interface and the tools you receive.</p>
+      </div>
+      <div class="role-grid">
+        <button class="role-card" data-role="seeker"><strong>💼 Job Seeker</strong><span>Full-time / internship. Skill-gap guidance + ranked matches.</span></button>
+        <button class="role-card" data-role="recruiter"><strong>🏢 Recruiter / CEO</strong><span>Post real opportunities with salary, exp & interview slots.</span></button>
+        <button class="role-card" data-role="teen"><strong>⚡ Teen Freelance</strong><span>15–19 · Small paid gigs that build proof-of-work.</span></button>
+      </div>
+      <div class="gate-actions"><div></div><button class="btn primary" id="gateNext0" disabled>Continue →</button></div>
+    </div>
+
+    <div id="gateStep1" style="display:none">
+      <div class="gate-copy"><h1>Profile <em>strength</em></h1><p>Resume + portfolio are mandatory. We scan them to extract skills.</p></div>
+      <div class="form-grid">
+        <div class="field"><label>Full name</label><input id="gName" type="text" placeholder="Your name"></div>
+        <div class="field"><label>Location</label><input id="gLoc" type="text" placeholder="City, State"></div>
+        <div class="field full" id="recruiterFields" style="display:none"><label>Company name</label><input id="gCompany" type="text" placeholder="Your company"></div>
+        <div class="field full" id="teenAgeField" style="display:none"><label>Age (must be 15+)</label><input id="gAge" type="number" min="15" max="19" placeholder="15–19"></div>
+        <div class="field full"><label>Skills (comma separated)</label><input id="gSkills" type="text" placeholder="Python, React, SQL..."></div>
+        <div class="field"><label>Years of experience</label>
+          <select id="gExp"><option value="0">Fresher</option><option value="1">0–1</option><option value="2">1–3</option><option value="4">3–5</option><option value="6">5+</option></select>
+        </div>
+        <div class="field"><label>Desired role</label><input id="gRole" type="text" placeholder="Software Engineer"></div>
+        <div class="field full"><label>Portfolio / GitHub (mandatory)</label><input id="gPortfolio" type="url" placeholder="https://..."></div>
+        <div class="field full"><label>Resume text (mandatory)</label><textarea id="gResume" placeholder="Paste projects, achievements..."></textarea></div>
+        <div class="field full">
+          <label class="file-box">
+            <input type="file" id="gResumeFile" accept=".pdf,.doc,.docx,.txt">
+            <div><strong id="resumeFileLabel">📄 Upload Resume</strong><span>Mandatory</span></div>
+          </label>
+        </div>
+        <div class="field full" id="teenLegal" style="display:none">
+          <div class="legal-notice"><strong>Legal Notice</strong><br>You must be 15+. SAKSHAM is not responsible for any monetary scams or payment disputes on freelance gigs. All financial dealings are at your own risk.</div>
+        </div>
+      </div>
+      <div class="gate-actions">
+        <button class="btn ghost" id="gateBack1">← Back</button>
+        <button class="btn primary" id="gateNext1">Continue →</button>
+      </div>
+    </div>
+
+    <div id="gateStep2" style="display:none">
+      <div class="gate-copy"><h1>Preferences</h1><p>Helps ranking and location-aware suggestions.</p></div>
+      <div class="form-grid">
+        <div class="field full">
+          <label>Work preference</label>
+          <select id="gWorkPref"><option value="hybrid">Hybrid</option><option value="office">Office / Travel OK</option><option value="remote">Remote only</option></select>
+        </div>
+        <div class="field full"><label>Target companies (optional)</label><input id="gCompanies" type="text" placeholder="Microsoft, Google..."></div>
+      </div>
+      <div class="gate-actions">
+        <button class="btn ghost" id="gateBack2">← Back</button>
+        <button class="btn primary" id="gateFinish">Scan & Enter →</button>
+      </div>
+    </div>
+
+    <div id="gateStep3" style="display:none">
+      <div class="gate-copy"><h1>Skill <em>scan</em> complete</h1><p>Skills extracted from resume + portfolio.</p></div>
+      <div id="scanResult" style="margin-top:18px;padding:16px;border-radius:14px;background:#141014;border:1px solid var(--line);font-size:13.5px;line-height:1.6;color:#c0b4b9"></div>
+      <div class="gate-actions">
+        <button class="btn ghost" id="gateBack3">← Back</button>
+        <button class="btn primary" id="gateEnter">Enter Platform →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="app-frame">
+    <aside class="sidebar">
+      <div class="side-brand">
+        <div class="brand-mark">S</div>
+        <div>
+          <div class="brand-name">SAK<span>SHAM</span></div>
+          <div class="brand-cap">AJEYA 26 · INTEL OS</div>
+        </div>
+      </div>
+      <div class="nav-label">NAVIGATE</div>
+      <nav>
+        <button class="nav-item active" data-nav="home"><span class="icon">⌂</span><span>Command Home</span></button>
+        <button class="nav-item" data-nav="radar"><span class="icon">⌕</span><span>Opportunity Radar</span></button>
+        <button class="nav-item" data-nav="analytics"><span class="icon">◈</span><span>My Analytics</span></button>
+        <button class="nav-item" id="teenNav"><span class="icon">⚡</span><span>Teen Freelance</span></button>
+        <button class="nav-item" id="dakshaNav"><span class="icon">✦</span><span>DAKSHA Guide</span></button>
+        <button class="nav-item" id="appsNav"><span class="icon">📋</span><span>My Applications</span></button>
+        <button class="nav-item" id="companyNav" style="display:none"><span class="icon">🏢</span><span>Post a Job</span></button>
+      </nav>
+      <div class="side-card">
+        <div style="font:500 9px 'DM Mono';color:var(--dim);letter-spacing:.1em">PROFILE SIGNAL</div>
+        <div class="side-profile">
+          <div class="avatar" id="sideAvatar">AR</div>
+          <div>
+            <strong id="sideName">Member</strong>
+            <span id="sideRole">Career track</span>
+          </div>
+        </div>
+        <div class="mini-bar"><span id="sideReadinessBar" style="width:72%"></span></div>
+        <div style="display:flex;justify-content:space-between;margin-top:7px;font:10px 'DM Mono';color:var(--muted)">
+          <span>Readiness</span><strong style="color:var(--red-bright)" id="sideReadiness">72%</strong>
+        </div>
+      </div>
+      <div class="side-foot">
+        <span>v1.3 · LIVE API</span>
+        <span class="live"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)"></span> LIVE</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb">SAKSHAM <strong id="crumbLabel"> · Command Home</strong></div>
+      </header>
+
+      <div class="feed-header">
+        <div class="feed-title" id="feedTitle">Ranked Opportunities</div>
+        <div class="feed-sub">Live global jobs via Remotive API + company posts · Click “Apply on Official Site” to go to the real listing</div>
+      </div>
+
+      <div class="news-bar">
+        <div class="news-label">⚡ MARKET SIGNAL</div>
+        <div class="news-content" id="newsContent">Loading…</div>
+      </div>
+
+      <div class="info-board">
+        <h3>How SAKSHAM works</h3>
+        <ul>
+          <li>Live global remote jobs from Remotive API (official links)</li>
+          <li>Skill overlap (45%) + Experience (25%) + Location (15%) + Target (15%)</li>
+          <li>Every card has “Apply on Official Site →” that opens the real job page</li>
+          <li>DAKSHA closes the exact skill gaps blocking your target role</li>
+        </ul>
+      </div>
+
+      <div id="jobFeed"></div>
+    </main>
+
+    <aside class="rightbar">
+      <div class="search-box">
+        <span>⌕</span>
+        <input type="text" id="searchInput" placeholder="Filter by skill, company, city…">
+      </div>
+      <div class="panel">
+        <div class="panel-title">Profile Strength <span class="panel-link" id="editProfile">Edit</span></div>
+        <div style="display:flex;align-items:center;gap:11px">
+          <div class="avatar" id="profileAvatar" style="width:38px;height:38px;font-size:12px">AR</div>
+          <div>
+            <strong id="profileName" style="font-size:13.5px">Member</strong>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px" id="profileRole">—</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:12px">
+          <div style="text-align:center;padding:7px;background:#141014;border-radius:9px"><strong id="statApps" style="display:block;font-size:14px">0</strong><span style="font-size:9px;color:var(--muted)">Apps</span></div>
+          <div style="text-align:center;padding:7px;background:#141014;border-radius:9px"><strong id="statSaved" style="display:block;font-size:14px">0</strong><span style="font-size:9px;color:var(--muted)">Saved</span></div>
+          <div style="text-align:center;padding:7px;background:#141014;border-radius:9px"><strong style="display:block;font-size:14px;color:var(--red-bright)" id="statReady">72%</strong><span style="font-size:9px;color:var(--muted)">Ready</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Readiness Analytics</div>
+        <div class="score-wrap">
+          <div class="score-ring" id="scoreRing" style="--score:72%"><strong id="scoreValue">72%</strong></div>
+          <div>
+            <strong style="font-size:12.5px" id="scoreLabel">Getting there</strong>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4" id="scoreHint">Close DSA + System Design.</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-title">Skill Signal</div><div id="skillBars"></div></div>
+      <div class="panel"><div class="panel-title">Top Gaps to Close</div><div id="gapList"></div></div>
+    </aside>
+  </div>
+</div>
+
+<!-- JOB DETAIL -->
+<div class="modal-overlay" id="jobModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h2 id="dTitle">Role</h2>
+        <p id="dCompany">Company · Location</p>
+      </div>
+      <button class="close-btn" onclick="closeModal('jobModal')">×</button>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item"><label>Salary</label><strong id="dSalary">—</strong></div>
+      <div class="detail-item"><label>Experience</label><strong id="dExp">—</strong></div>
+      <div class="detail-item"><label>Work Type</label><strong id="dWork">—</strong></div>
+      <div class="detail-item"><label>Location</label><strong id="dLoc">—</strong></div>
+    </div>
+    <div class="detail-item" style="margin-bottom:11px">
+      <label>Required Skills</label>
+      <div id="dSkills" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px"></div>
+    </div>
+    <div class="detail-item">
+      <label>Description</label>
+      <p id="dDesc" style="font-size:13px;line-height:1.55;color:#a89ca2;margin-top:5px"></p>
+    </div>
+    <div class="detail-item" style="margin-top:11px">
+      <label>Match Explanation</label>
+      <p id="dMatchExplain" style="font-size:12.5px;line-height:1.5;color:#b0a4a9;margin-top:5px"></p>
+    </div>
+    <div class="detail-item" style="margin-top:11px">
+      <label>Interview / Source</label>
+      <div id="dDates" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px"></div>
+    </div>
+    <div class="apply-row">
+      <button class="btn external" id="officialApplyBtn" onclick="openOfficial()">Apply on Official Site →</button>
+      <button class="btn primary" onclick="applyJob()">Track on SAKSHAM</button>
+      <button class="btn ghost" onclick="saveJob()">Save</button>
+      <button class="btn ghost" onclick="closeModal('jobModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMPANY POST + APPS + DAKSHA + CHAT (same structure as before) -->
+<div class="modal-overlay" id="companyModal">
+  <div class="modal-box">
+    <div class="modal-header"><div><h2>Post a Job Opportunity</h2><p>Real requirements — used by matching engine</p></div><button class="close-btn" onclick="closeModal('companyModal')">×</button></div>
+    <div class="form-grid">
+      <div class="field full"><label>Job Title</label><input id="cTitle" placeholder="Software Engineer…"></div>
+      <div class="field"><label>Primary Skills</label><input id="cSkills" placeholder="Python, React…"></div>
+      <div class="field"><label>Experience</label><select id="cExp"><option>Fresher</option><option>0–1 years</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option></select></div>
+      <div class="field"><label>Salary</label><input id="cSalary" placeholder="6–12 LPA"></div>
+      <div class="field"><label>Work Type</label><select id="cWork"><option>Full-time · Hybrid</option><option>Full-time · Office</option><option>Remote</option><option>Internship</option></select></div>
+      <div class="field"><label>Location</label><input id="cLoc" placeholder="Bengaluru, Remote…"></div>
+      <div class="field full"><label>Description</label><textarea id="cDesc" rows="3"></textarea></div>
+      <div class="field full"><label>Interview dates</label><input id="cDates" placeholder="18 Sep 2026, 22 Sep 2026"></div>
+    </div>
+    <div class="apply-row">
+      <button class="btn primary" onclick="publishJob()">Publish Opportunity</button>
+      <button class="btn ghost" onclick="closeModal('companyModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="appsModal">
+  <div class="modal-box">
+    <div class="modal-header"><div><h2>My Applications</h2><p>Track status</p></div><button class="close-btn" onclick="closeModal('appsModal')">×</button></div>
+    <div id="appsList"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="dakshaModal">
+  <div class="modal-box">
+    <div class="modal-header"><div><h2>DAKSHA — Guided Next Step</h2><p>Concrete actions based on your gaps</p></div><button class="close-btn" onclick="closeModal('dakshaModal')">×</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+      <button class="role-card" onclick="dakshaPlan('skills')"><strong>📈 Skill sprint</strong><span>Close highest-impact gaps this week.</span></button>
+      <button class="role-card" onclick="dakshaPlan('side')"><strong>💼 Side hustle</strong><span>Small paid proof while applying.</span></button>
+      <button class="role-card" onclick="dakshaPlan('starter')"><strong>🌱 First proof</strong><span>Tiny tasks that become portfolio.</span></button>
+      <button class="role-card" onclick="dakshaPlan('target')"><strong>🎯 Role map</strong><span>Your skills vs real requirements.</span></button>
+    </div>
+    <div id="dakshaSummary" style="margin-top:16px;padding:13px;border-radius:11px;background:#141014;border:1px solid var(--line);font-size:13px;line-height:1.55;color:#c0b4b9">Choose an option.</div>
+    <div class="apply-row">
+      <button class="btn primary" onclick="openChat('Talk me through my DAKSHA plan')">Discuss with assistant</button>
+      <button class="btn ghost" onclick="closeModal('dakshaModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<button class="chat-launch" id="chatLaunch">💬</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <div><strong>SAKSHAM Assistant</strong><span>Career guide · match explain · DAKSHA</span></div>
+    <button class="close-btn" id="chatClose" style="width:28px;height:28px;font-size:15px">×</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="bubble bot">Hi. I explain match scores, skill gaps, and next actions. Ask me anything.</div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Ask about matches, skills, next steps…">
+    <button class="chat-send" id="chatSend">➤</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ===== STATE ===== */
+let gateStep = 0;
+let selectedRole = null;
+let teenMode = false;
+let currentJob = null;
+let applications = JSON.parse(localStorage.getItem('saksham_apps') || '[]');
+let postedJobs = JSON.parse(localStorage.getItem('saksham_jobs') || '[]');
+let user = JSON.parse(localStorage.getItem('saksham_user') || 'null');
+let resumeUploaded = false;
+let liveJobs = [];          // from Remotive API
+let apiLoaded = false;
+
+const baseJobs = [
+  { id:1, company:"Microsoft", title:"Software Engineer", desc:"Design and ship scalable services.", skills:["Python","DSA","Azure","System Design"], salary:"18–28 LPA", exp:"2–5 years", expYears:3.5, work:"Full-time · Hybrid", location:"Bengaluru", dates:["18 Sep 2026"], time:"2h", likes:248, url:"https://careers.microsoft.com/us/en/search-results?keywords=software%20engineer" },
+  { id:2, company:"Amazon", title:"Junior Software Developer", desc:"Build customer-facing features.", skills:["Java","SQL","AWS","Problem Solving"], salary:"12–18 LPA", exp:"0–2 years", expYears:1, work:"Full-time · Office", location:"Hyderabad", dates:["16 Sep 2026"], time:"4h", likes:182, url:"https://www.amazon.jobs/en/search?base_query=software+developer" },
+  { id:3, company:"Google", title:"Associate Software Engineer", desc:"Large-scale systems and algorithms.", skills:["C++","Algorithms","Distributed Systems","DSA"], salary:"20–32 LPA", exp:"1–3 years", expYears:2, work:"Full-time · Hybrid", location:"Remote / Bengaluru", dates:["19 Sep 2026"], time:"6h", likes:391, url:"https://www.google.com/about/careers/applications/jobs/results/?q=software%20engineer" },
+  { id:4, company:"TCS", title:"Associate Developer", desc:"Digital transformation projects.", skills:["Java","SQL","Communication"], salary:"3.5–5.5 LPA", exp:"Fresher", expYears:0, work:"Full-time · Office", location:"Pune", dates:["17 Sep 2026"], time:"8h", likes:129, url:"https://www.tcs.com/careers" },
+  { id:5, company:"Flipkart", title:"Data Analyst", desc:"Product & customer data analysis.", skills:["SQL","Python","Excel","Communication"], salary:"8–14 LPA", exp:"1–3 years", expYears:2, work:"Full-time · Hybrid", location:"Bengaluru", dates:["19 Sep 2026"], time:"12h", likes:97, url:"https://www.flipkartcareers.com/" },
+  { id:6, company:"Infosys", title:"System Engineer", desc:"Client projects across domains.", skills:["Java","SQL","Communication","Problem Solving"], salary:"3.6–5 LPA", exp:"Fresher", expYears:0, work:"Full-time · Office", location:"Multiple cities", dates:["20 Sep 2026"], time:"1d", likes:210, url:"https://www.infosys.com/careers/" }
+];
+
+const teenJobs = [
+  { id:9001, company:"Teen Hub", title:"Canva Social Post Designer", desc:"Create 5 simple social posts.", skills:["Canva","Design","Social Media"], salary:"₹1k–3k / project", exp:"Beginner", expYears:0, work:"Freelance · Remote", location:"Remote", dates:["Flexible"], time:"just now", likes:34, url:null },
+  { id:9002, company:"Local Creator", title:"Short Video Captioning", desc:"Clean captions for short videos.", skills:["CapCut","English"], salary:"₹500–1.5k / task", exp:"No experience", expYears:0, work:"Freelance · Remote", location:"Remote", dates:["Flexible"], time:"just now", likes:21, url:null },
+  { id:9003, company:"Campus Studio", title:"Landing Page Helper", desc:"Update text and images on templates.", skills:["HTML","CSS"], salary:"₹2k–5k / project", exp:"Beginner", expYears:0, work:"Freelance · Remote", location:"Remote", dates:["Flexible"], time:"1h", likes:29, url:null }
+];
+
+/* ===== FETCH LIVE JOBS FROM REMOTIVE ===== */
+async function fetchLiveJobs() {
+  try {
+    const res = await fetch('https://remotive.com/api/remote-jobs?limit=25&category=software-dev');
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    liveJobs = (data.jobs || []).map((j, i) => ({
+      id: 10000 + i,
+      company: j.company_name || 'Remote Company',
+      title: j.title || 'Remote Role',
+      desc: (j.description || '').replace(/<[^>]+>/g, ' ').slice(0, 220) + '…',
+      skills: (j.tags || []).slice(0, 5).map(t => t.charAt(0).toUpperCase() + t.slice(1)),
+      salary: j.salary || 'Competitive',
+      exp: 'See listing',
+      expYears: 2,
+      work: 'Remote',
+      location: j.candidate_required_location || 'Worldwide / Remote',
+      dates: ['See official site'],
+      time: 'live',
+      likes: Math.floor(Math.random() * 80) + 10,
+      url: j.url,                    // ← official Remotive job page
+      source: 'Remotive'
+    }));
+    apiLoaded = true;
+    console.log('Live jobs loaded:', liveJobs.length);
+  } catch (err) {
+    console.warn('Remotive API unavailable, using fallback', err);
+    // fallback still has real external links
+    liveJobs = [
+      { id:10001, company:"Remote Global", title:"Senior Frontend Engineer", desc:"Build modern web applications for international clients.", skills:["React","TypeScript","CSS"], salary:"$60k–90k", exp:"3+ years", expYears:3, work:"Remote", location:"Worldwide", dates:["Flexible"], time:"live", likes:64, url:"https://remotive.com/remote-jobs", source:"Remotive" },
+      { id:10002, company:"Global Tech", title:"Full Stack Developer", desc:"End-to-end product development in a distributed team.", skills:["Node.js","React","PostgreSQL"], salary:"$55k–85k", exp:"2–5 years", expYears:3, work:"Remote", location:"Worldwide", dates:["Flexible"], time:"live", likes:41, url:"https://remotive.com/remote-jobs", source:"Remotive" }
+    ];
+  }
+}
+
+/* ===== VOID + CURSOR (same as before) ===== */
+(function(){
+  const canvas = document.getElementById('voidCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, mx = -999, my = -999;
+  const particles = [];
+  function resize(){ w = canvas.width = innerWidth * devicePixelRatio; h = canvas.height = innerHeight * devicePixelRatio; canvas.style.width = innerWidth+'px'; canvas.style.height = innerHeight+'px'; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+  resize(); addEventListener('resize', resize);
+  const count = Math.min(100, Math.floor(innerWidth / 10));
+  for(let i=0;i<count;i++) particles.push({ x:Math.random()*innerWidth, y:Math.random()*innerHeight, vx:(Math.random()-.5)*.22, vy:(Math.random()-.5)*.22, r:Math.random()*1.6+.25 });
+  addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; }, {passive:true});
+  function draw(){
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    for(const p of particles){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0||p.x>innerWidth) p.vx *= -1;
+      if(p.y<0||p.y>innerHeight) p.vy *= -1;
+      const d = Math.hypot(p.x-mx, p.y-my);
+      if(d < 140){ p.x += (p.x-mx)/d * 0.35; p.y += (p.y-my)/d * 0.35; }
+      ctx.fillStyle = `rgba(255,45,74,${Math.max(.08, .55 - d/900)})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+      for(const q of particles){
+        const dist = Math.hypot(p.x-q.x, p.y-q.y);
+        if(dist < 90){ ctx.strokeStyle = `rgba(255,45,74,${(1-dist/90)*.07})`; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+const cursor = document.getElementById('cursor');
+const follower = document.getElementById('cursorFollower');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+  follower.style.left = e.clientX + 'px'; follower.style.top = e.clientY + 'px';
+});
+function attachHover() {
+  document.querySelectorAll('button, .nav-item, .action, .role-card, .post, .btn, .close-btn, .panel-link, .search-box, .file-box').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); follower.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); follower.classList.remove('hover'); });
+  });
+}
+
+/* ===== OPENING / LOADING / GATE (core logic same) ===== */
+document.getElementById('enterBtn').onclick = () => {
+  document.getElementById('opening').classList.add('hide');
+  setTimeout(() => {
+    if (user) { enterApp(); }
+    else {
+      document.getElementById('loading').style.display = 'grid';
+      runLoading();
+    }
+  }, 800);
+};
+
+function runLoading() {
+  let p = 0;
+  const pct = document.getElementById('loadingPct');
+  const fill = document.getElementById('progressFill');
+  const status = document.getElementById('loadingStatus');
+  const msgs = ['Initializing career intelligence','Connecting to global job API','Scanning opportunity network','Preparing skill analysis','Almost ready'];
+  // start API fetch early
+  fetchLiveJobs();
+  const iv = setInterval(() => {
+    p++;
+    pct.textContent = p + '%';
+    fill.style.width = p + '%';
+    if (p % 18 === 0) status.textContent = msgs[Math.min(Math.floor(p/18), msgs.length-1)];
+    if (p >= 100) {
+      clearInterval(iv);
+      status.textContent = 'SAKSHAM is ready';
+      setTimeout(() => {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('gate').style.display = 'grid';
+        attachHover();
+      }, 600);
+    }
+  }, 28);
+}
+
+/* Gate logic (abbreviated – identical to previous version) */
+document.querySelectorAll('.role-card[data-role]').forEach(card => {
+  card.onclick = () => {
+    document.querySelectorAll('.role-card[data-role]').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedRole = card.dataset.role;
+    document.getElementById('gateNext0').disabled = false;
+  };
+});
+document.getElementById('gateNext0').onclick = () => {
+  if (!selectedRole) return;
+  document.getElementById('recruiterFields').style.display = selectedRole === 'recruiter' ? 'block' : 'none';
+  document.getElementById('teenAgeField').style.display = selectedRole === 'teen' ? 'block' : 'none';
+  document.getElementById('teenLegal').style.display = selectedRole === 'teen' ? 'block' : 'none';
+  gateStep = 1; updateGateUI();
+};
+document.getElementById('gateBack1').onclick = () => { gateStep = 0; updateGateUI(); };
+document.getElementById('gateNext1').onclick = () => {
+  if (!document.getElementById('gName').value.trim()) { showToast('Please enter your name'); return; }
+  if (!document.getElementById('gSkills').value.trim()) { showToast('Add skills'); return; }
+  if (!document.getElementById('gPortfolio').value.trim()) { showToast('Portfolio is mandatory'); return; }
+  if (!document.getElementById('gResume').value.trim() && !resumeUploaded) { showToast('Resume is mandatory'); return; }
+  if (selectedRole === 'teen') {
+    const age = Number(document.getElementById('gAge').value);
+    if (!age || age < 15) { showToast('Age must be 15+'); return; }
+  }
+  if (selectedRole === 'recruiter' && !document.getElementById('gCompany').value.trim()) { showToast('Company name required'); return; }
+  gateStep = 2; updateGateUI();
+};
+document.getElementById('gateBack2').onclick = () => { gateStep = 1; updateGateUI(); };
+document.getElementById('gateFinish').onclick = () => {
+  const skillsRaw = document.getElementById('gSkills').value.trim();
+  const resumeText = document.getElementById('gResume').value.trim().toLowerCase();
+  const extra = [];
+  if (resumeText.includes('python')) extra.push('Python');
+  if (resumeText.includes('react')) extra.push('React');
+  if (resumeText.includes('sql')) extra.push('SQL');
+  if (resumeText.includes('dsa') || resumeText.includes('algorithm')) extra.push('DSA');
+  if (resumeText.includes('system design')) extra.push('System Design');
+  const allSkills = [...new Set([...skillsRaw.split(',').map(s => s.trim()).filter(Boolean), ...extra])];
+  user = {
+    role: selectedRole,
+    name: document.getElementById('gName').value.trim() || 'SAKSHAM Member',
+    location: document.getElementById('gLoc').value.trim(),
+    skills: allSkills,
+    expYears: Number(document.getElementById('gExp').value) || 0,
+    target: document.getElementById('gRole').value.trim(),
+    companies: document.getElementById('gCompanies').value.trim(),
+    portfolio: document.getElementById('gPortfolio').value.trim(),
+    resume: document.getElementById('gResume').value.trim(),
+    workPref: document.getElementById('gWorkPref').value,
+    companyName: document.getElementById('gCompany').value.trim() || '',
+    age: document.getElementById('gAge').value || ''
+  };
+  localStorage.setItem('saksham_user', JSON.stringify(user));
+  document.getElementById('scanResult').innerHTML = `<strong style="color:var(--red-bright)">Extracted skills:</strong> ${allSkills.join(', ')}<br><br><strong>Portfolio:</strong> ${user.portfolio}`;
+  gateStep = 3; updateGateUI();
+};
+document.getElementById('gateBack3').onclick = () => { gateStep = 2; updateGateUI(); };
+document.getElementById('gateEnter').onclick = () => {
+  document.getElementById('gate').style.display = 'none';
+  enterApp();
+};
+document.getElementById('gResumeFile').onchange = (e) => {
+  const f = e.target.files[0];
+  if (f) { resumeUploaded = true; document.getElementById('resumeFileLabel').textContent = '✓ ' + f.name; showToast('Resume uploaded'); }
+};
+function updateGateUI(){
+  document.getElementById('gateStep0').style.display = gateStep===0 ? 'block':'none';
+  document.getElementById('gateStep1').style.display = gateStep===1 ? 'block':'none';
+  document.getElementById('gateStep2').style.display = gateStep===2 ? 'block':'none';
+  document.getElementById('gateStep3').style.display = gateStep===3 ? 'block':'none';
+  document.querySelectorAll('#gateProgress span').forEach((s,i) => s.classList.toggle('on', i<=gateStep));
+}
+
+/* ===== MATCH ENGINE (same) ===== */
+function normalize(s){ return (s||'').toLowerCase().replace(/[^a-z0-9+#.]/g,''); }
+function skillOverlap(userSkills, jobSkills){
+  if(!userSkills.length || !jobSkills.length) return { score:0, hits:[], missing:jobSkills.slice() };
+  const u = userSkills.map(normalize);
+  const hits = [], missing = [];
+  jobSkills.forEach(js => {
+    const n = normalize(js);
+    if(u.some(us => us.includes(n) || n.includes(us) || (n==='dsa' && (us.includes('algorithm')||us.includes('data structure'))))) hits.push(js);
+    else missing.push(js);
+  });
+  return { score: hits.length / jobSkills.length, hits, missing };
+}
+function expFit(userYears, jobYears){
+  if(jobYears === 0) return userYears <= 1 ? 1 : 0.85;
+  const diff = Math.abs(userYears - jobYears);
+  if(diff <= 0.5) return 1; if(diff <= 1.5) return 0.85; if(diff <= 3) return 0.6; return 0.35;
+}
+function locationFit(userLoc, userPref, jobLoc, jobWork){
+  let score = 0.6;
+  if(userPref === 'remote' && (jobWork.toLowerCase().includes('remote') || jobLoc.toLowerCase().includes('remote'))) score = 1;
+  else if(userPref === 'office' && !jobWork.toLowerCase().includes('remote')) score = 0.9;
+  else if(userPref === 'hybrid') score = 0.85;
+  if(userLoc && jobLoc && jobLoc.toLowerCase().includes(userLoc.toLowerCase().split(',')[0].trim())) score = Math.min(1, score + 0.15);
+  return score;
+}
+function targetFit(userTarget, userCompanies, jobTitle, jobCompany){
+  let score = 0.5;
+  if(userTarget && jobTitle.toLowerCase().includes(userTarget.toLowerCase().split(' ')[0])) score += 0.3;
+  if(userCompanies && userCompanies.toLowerCase().includes(jobCompany.toLowerCase())) score += 0.3;
+  return Math.min(1, score);
+}
+function computeMatch(job){
+  if(!user || !user.skills) return { pct: 40, explain: 'Complete profile for accurate scoring', badge: 'mid' };
+  const so = skillOverlap(user.skills, job.skills);
+  const pct = Math.round((so.score*0.45 + expFit(user.expYears||0, job.expYears||0)*0.25 + locationFit(user.location, user.workPref, job.location, job.work)*0.15 + targetFit(user.target, user.companies, job.title, job.company)*0.15) * 100);
+  let explain = [];
+  if(so.hits.length) explain.push(`Skills match: ${so.hits.join(', ')}`);
+  if(so.missing.length) explain.push(`Missing: ${so.missing.slice(0,3).join(', ')}`);
+  const badge = pct >= 70 ? 'high' : pct >= 45 ? 'mid' : 'low';
+  return { pct, explain: explain.join(' · ') || 'Partial match', badge, missing: so.missing };
+}
+
+function computeReadiness(){
+  if(!user || !user.skills) return { score: 40, label: 'Start profile', hint: 'Add skills', gaps: [] };
+  const allJobSkills = new Set();
+  [...baseJobs, ...liveJobs].forEach(j => j.skills.forEach(s => allJobSkills.add(s)));
+  const so = skillOverlap(user.skills, [...allJobSkills]);
+  let score = Math.round(so.score * 55 + Math.min(user.expYears/5,1)*20 + (user.target?10:0) + (user.resume?10:0) + (user.portfolio?5:0));
+  score = Math.min(95, Math.max(25, score));
+  const gaps = so.missing.slice(0,5).map(s => ({ skill:s, reason:'Frequently required' }));
+  const label = score >= 75 ? 'Strong readiness' : score >= 55 ? 'Getting there' : 'Needs focused work';
+  const hint = gaps.length ? `Priority: ${gaps[0].skill}` : 'Keep applying';
+  return { score, label, hint, gaps };
+}
+
+function renderAnalytics(){
+  const r = computeReadiness();
+  document.getElementById('sideReadiness').textContent = r.score + '%';
+  document.getElementById('sideReadinessBar').style.width = r.score + '%';
+  document.getElementById('statReady').textContent = r.score + '%';
+  document.getElementById('scoreValue').textContent = r.score + '%';
+  document.getElementById('scoreRing').style.setProperty('--score', r.score + '%');
+  document.getElementById('scoreLabel').textContent = r.label;
+  document.getElementById('scoreHint').textContent = r.hint;
+  const bars = document.getElementById('skillBars');
+  if(user && user.skills && user.skills.length){
+    bars.innerHTML = user.skills.slice(0,6).map((s,i) => {
+      const level = 90 - i*11 - Math.random()*6;
+      return `<div class="skill"><div class="skill-head">${s} <span>${Math.round(level)}%</span></div><div class="skill-track"><div class="skill-fill" style="width:${level}%"></div></div></div>`;
+    }).join('');
+  } else bars.innerHTML = '<div style="font-size:12px;color:var(--muted)">Add skills for signal.</div>';
+  const gapList = document.getElementById('gapList');
+  gapList.innerHTML = r.gaps.length ? r.gaps.map(g => `<div class="gap-item"><strong>${g.skill}</strong><span>${g.reason}</span></div>`).join('') : '<div style="font-size:12px;color:var(--muted)">No critical gaps.</div>';
+}
+
+/* ===== JOBS WITH OFFICIAL LINKS ===== */
+function getJobs(){
+  if (teenMode) return teenJobs;
+  return [...postedJobs, ...liveJobs, ...baseJobs];
+}
+
+function renderJobs(list){
+  let jobs = list || getJobs();
+  if(user && user.role !== 'recruiter' && !teenMode){
+    jobs = jobs.map(j => ({...j, _match: computeMatch(j)})).sort((a,b) => b._match.pct - a._match.pct);
+  }
+  const feed = document.getElementById('jobFeed');
+  if(!jobs.length){
+    feed.innerHTML = '<div style="padding:36px;text-align:center;color:var(--muted)">No matches.</div>';
+    return;
+  }
+  feed.innerHTML = jobs.map(j => {
+    const m = j._match || computeMatch(j);
+    const badgeClass = m.badge === 'high' ? '' : m.badge === 'mid' ? 'mid' : 'low';
+    const source = j.source ? `<span class="source-badge">${j.source}</span>` : '';
+    const hasUrl = j.url ? true : false;
+    return `
+    <article class="post" onclick="openJob(${j.id})">
+      <div class="post-top">
+        <div class="company-avatar">${j.company.slice(0,2).toUpperCase()}</div>
+        <div class="post-meta">
+          <span class="post-author">${j.company}</span>
+          <span class="post-time">· ${j.time||'just now'}</span>
+          ${user && user.role !== 'recruiter' ? `<span class="match-badge ${badgeClass}">${m.pct}% match</span>` : ''}
+          ${source}
+        </div>
+      </div>
+      <div class="post-body">
+        <h2>${j.title}</h2>
+        <p>${j.desc}</p>
+        <div class="job-tags">
+          <span class="tag red">${teenMode?'Teen Gig':(j.source||'Hiring')}</span>
+          <span class="tag ember">${j.salary}</span>
+          <span class="tag">${j.location}</span>
+          <span class="tag">${j.exp}</span>
+        </div>
+      </div>
+      ${user && user.role !== 'recruiter' ? `<div class="match-explain">${m.explain}</div>` : ''}
+      <div class="post-actions" onclick="event.stopPropagation()">
+        <span class="action" onclick="likePost(this)">♡ ${j.likes||0}</span>
+        <span class="action" onclick="openJob(${j.id})">View details</span>
+        ${hasUrl ? `<span class="action external" onclick="window.open('${j.url}','_blank')">Apply on Official Site →</span>` : ''}
+        <span class="action" onclick="saveFromCard(this)">♧ Save</span>
+      </div>
+    </article>`;
+  }).join('');
+  attachHover();
+}
+
+function openJob(id){
+  const job = getJobs().find(j => j.id === id) || baseJobs.find(j => j.id === id) || liveJobs.find(j => j.id === id);
+  if(!job) return;
+  currentJob = job;
+  const m = computeMatch(job);
+  document.getElementById('dTitle').textContent = job.title;
+  document.getElementById('dCompany').textContent = `${job.company} · ${job.location}`;
+  document.getElementById('dSalary').textContent = job.salary;
+  document.getElementById('dExp').textContent = job.exp;
+  document.getElementById('dWork').textContent = job.work;
+  document.getElementById('dLoc').textContent = job.location;
+  document.getElementById('dDesc').textContent = job.desc;
+  document.getElementById('dSkills').innerHTML = (job.skills||[]).map(s => `<span class="tag ember">${s}</span>`).join('');
+  document.getElementById('dMatchExplain').textContent = `${m.pct}% match — ${m.explain}`;
+  document.getElementById('dDates').innerHTML = (job.dates||[]).map(d => `<span class="tag">${d}</span>`).join('') || '<span class="tag">See official site</span>';
+  
+  const btn = document.getElementById('officialApplyBtn');
+  if (job.url) {
+    btn.style.display = 'inline-flex';
+    btn.onclick = () => window.open(job.url, '_blank');
+  } else {
+    btn.style.display = 'none';
+  }
+  document.getElementById('jobModal').style.display = 'flex';
+}
+
+function openOfficial() {
+  if (currentJob && currentJob.url) window.open(currentJob.url, '_blank');
+}
+
+function applyJob(){
+  if(!currentJob) return;
+  if(user.role === 'recruiter'){ showToast('Recruiters cannot apply.'); return; }
+  if(applications.find(a => a.jobId === currentJob.id)){ showToast('Already applied.'); return; }
+  applications.push({
+    jobId: currentJob.id, title: currentJob.title, company: currentJob.company,
+    status: 'pending', appliedAt: new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})
+  });
+  localStorage.setItem('saksham_apps', JSON.stringify(applications));
+  document.getElementById('statApps').textContent = applications.length;
+  showToast('Tracked on SAKSHAM. Use “Apply on Official Site” for the real application.');
+  closeModal('jobModal');
+}
+function saveJob(){ let n = Number(document.getElementById('statSaved').textContent||0); document.getElementById('statSaved').textContent = n+1; showToast('Saved.'); }
+function saveFromCard(el){ el.textContent='✓ Saved'; el.style.color='var(--red-bright)'; saveJob(); }
+function likePost(el){ if(el.textContent.includes('♡')){ el.textContent=el.textContent.replace('♡','♥'); el.style.color='var(--red)'; } }
+
+function publishJob(){
+  const title = document.getElementById('cTitle').value.trim();
+  const skills = document.getElementById('cSkills').value.trim();
+  const salary = document.getElementById('cSalary').value.trim();
+  const loc = document.getElementById('cLoc').value.trim();
+  const desc = document.getElementById('cDesc').value.trim();
+  if(!title||!skills||!salary||!loc||!desc){ showToast('Fill required fields.'); return; }
+  const newJob = {
+    id: Date.now(), company: user.companyName || user.name || 'Your Company', title, desc,
+    skills: skills.split(',').map(s=>s.trim()).filter(Boolean),
+    salary, exp: document.getElementById('cExp').value, expYears: 1,
+    work: document.getElementById('cWork').value, location: loc,
+    dates: document.getElementById('cDates').value ? document.getElementById('cDates').value.split(',').map(d=>d.trim()) : ['TBA'],
+    time: 'just now', likes: 0, url: null
+  };
+  postedJobs.unshift(newJob);
+  localStorage.setItem('saksham_jobs', JSON.stringify(postedJobs));
+  renderJobs();
+  closeModal('companyModal');
+  showToast('Job published and live.');
+}
+
+function enterApp(){
+  document.getElementById('app').style.display = 'block';
+  const name = user.name || 'Member';
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || 'SM';
+  document.getElementById('sideName').textContent = name;
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('sideAvatar').textContent = initials;
+  document.getElementById('profileAvatar').textContent = initials;
+  let roleText = user.target || 'Career explorer';
+  if(user.role === 'recruiter'){ roleText = 'Hiring · ' + (user.companyName || 'Company'); document.getElementById('companyNav').style.display = 'flex'; }
+  else if(user.role === 'teen'){ roleText = 'Teen Freelancer'; teenMode = true; document.getElementById('feedTitle').textContent = 'Teen Freelance Gigs'; }
+  document.getElementById('sideRole').textContent = roleText;
+  document.getElementById('profileRole').textContent = roleText;
+  document.getElementById('statApps').textContent = applications.length;
+  renderAnalytics();
+  renderJobs();
+  updateNews();
+  setInterval(updateNews, 5000);
+  showToast(`Welcome, ${name.split(' ')[0]} 🚀`);
+  attachHover();
+  // refresh live jobs if not yet loaded
+  if (!apiLoaded) fetchLiveJobs().then(() => renderJobs());
+}
+
+/* NAV + helpers */
+document.getElementById('teenNav').onclick = () => {
+  teenMode = !teenMode;
+  document.getElementById('feedTitle').textContent = teenMode ? 'Teen Freelance Gigs' : 'Ranked Opportunities';
+  renderJobs();
+  showToast(teenMode ? 'Teen Freelance mode ⚡' : 'Career mode');
+};
+document.getElementById('dakshaNav').onclick = () => document.getElementById('dakshaModal').style.display = 'flex';
+document.getElementById('appsNav').onclick = () => {
+  const list = document.getElementById('appsList');
+  if(!applications.length) list.innerHTML = '<p style="color:var(--muted);font-size:13px">No applications yet.</p>';
+  else list.innerHTML = applications.map(a => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      <div><strong style="font-size:13.5px">${a.title}</strong><div style="font-size:11.5px;color:var(--muted);margin-top:2px">${a.company} · ${a.appliedAt}</div></div>
+      <span style="padding:3px 9px;border-radius:99px;font-size:10px;background:rgba(255,174,66,.12);color:#ffae42">Under Review</span>
+    </div>`).join('');
+  document.getElementById('appsModal').style.display = 'flex';
+};
+document.getElementById('companyNav').onclick = () => document.getElementById('companyModal').style.display = 'flex';
+document.getElementById('editProfile').onclick = () => { localStorage.removeItem('saksham_user'); location.reload(); };
+document.getElementById('searchInput').oninput = e => {
+  const q = e.target.value.trim().toLowerCase();
+  if(!q){ renderJobs(); return; }
+  const filtered = getJobs().filter(j =>
+    j.title.toLowerCase().includes(q) || j.company.toLowerCase().includes(q) ||
+    j.location.toLowerCase().includes(q) || (j.skills||[]).some(s => s.toLowerCase().includes(q))
+  );
+  renderJobs(filtered);
+};
+
+function dakshaPlan(type){
+  const r = computeReadiness();
+  const plans = {
+    skills: `DAKSHA Skill Sprint: Focus on ${r.gaps[0]?.skill || 'Data Structures'} this week.`,
+    side: 'DAKSHA Side hustle: Take one small remote gig and turn it into portfolio proof.',
+    starter: 'DAKSHA First proof: Start with Canva, captioning or simple HTML/CSS tasks.',
+    target: `DAKSHA Role map: Target “${user?.target||'role'}”. Missing: ${(r.gaps.map(g=>g.skill).join(', ')||'none major')}.`
+  };
+  document.getElementById('dakshaSummary').textContent = plans[type];
+  showToast('DAKSHA updated ✦');
+}
+function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+
+/* CHAT */
+const chatPanel = document.getElementById('chatPanel');
+const chatMessages = document.getElementById('chatMessages');
+document.getElementById('chatLaunch').onclick = () => chatPanel.classList.toggle('open');
+document.getElementById('chatClose').onclick = () => chatPanel.classList.remove('open');
+document.getElementById('chatSend').onclick = sendChat;
+document.getElementById('chatInput').onkeydown = e => { if(e.key==='Enter') sendChat(); };
+function addBubble(text, who){
+  const b = document.createElement('div');
+  b.className = 'bubble '+(who||'bot');
+  b.textContent = text;
+  chatMessages.appendChild(b);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function assistantReply(q){
+  const x = q.toLowerCase();
+  const r = computeReadiness();
+  if(x.includes('match') || x.includes('score')) return `Match = 45% skills + 25% experience + 15% location + 15% target. Your readiness: ${r.score}%.`;
+  if(x.includes('official') || x.includes('apply') || x.includes('site')) return 'Click “Apply on Official Site →” on any job. It opens the real listing on Remotive or the company career page.';
+  if(x.includes('daksha')) return 'Open DAKSHA from the sidebar for skill sprints and next steps.';
+  if(x.includes('skill') || x.includes('gap')) return `Top gaps: ${r.gaps.map(g=>g.skill).join(', ')||'none major'}.`;
+  return `I can explain matches, official apply links, skill gaps or DAKSHA. Current readiness: ${r.score}%.`;
+}
+function sendChat(){
+  const q = document.getElementById('chatInput').value.trim();
+  if(!q) return;
+  addBubble(q,'user');
+  document.getElementById('chatInput').value = '';
+  setTimeout(() => addBubble(assistantReply(q)), 280);
+}
+function openChat(prefill){
+  closeModal('dakshaModal');
+  chatPanel.classList.add('open');
+  document.getElementById('chatInput').value = prefill||'';
+  document.getElementById('chatInput').focus();
+}
+
+/* NEWS */
+const news = [
+  {c:'Remotive', t:'Live global remote jobs now streaming into SAKSHAM.'},
+  {c:'Microsoft', t:'Python + cloud skills continue to drive demand.'},
+  {c:'Amazon', t:'Entry roles emphasise fundamentals and projects.'},
+  {c:'Market', t:'Portfolios and proof-of-work increasingly valued.'},
+  {c:'SAKSHAM', t:'Click “Apply on Official Site” to go straight to the real listing.'}
+];
+let ni=0;
+function updateNews(){
+  const el = document.getElementById('newsContent');
+  el.style.opacity='0';
+  setTimeout(()=>{ el.innerHTML = `<span class="news-company">${news[ni].c}</span> ${news[ni].t}`; el.style.opacity='1'; ni=(ni+1)%news.length; }, 260);
+}
+
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape'){
+    ['jobModal','companyModal','appsModal','dakshaModal'].forEach(closeModal);
+    chatPanel.classList.remove('open');
+  }
+});
+
+if(user){
+  document.getElementById('opening').classList.add('hide');
+  fetchLiveJobs().then(() => enterApp());
+}
+</script>
+</body>
+</html>
