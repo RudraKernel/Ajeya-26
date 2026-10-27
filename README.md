@@ -69,4 +69,129 @@ Start earning through small-scale gigs.
 </td>
 </tr>
 <tr>
-<td
+<td width="50%">
+
+### 🏢 Company Hiring
+A dedicated space for companies to find talent.
+
+- Discover skilled individuals
+- Post job opportunities
+- Connect with potential employees
+
+</td>
+<td width="50%">
+
+### 📈 Career Growth
+Build your experience before your first full-time job.
+
+- Develop practical skills
+- Build a professional portfolio
+- Improve employability
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🔄 How Ajeya'26 Works
+
+```mermaid
+flowchart TD
+    A["🚀 Join Ajeya'26"] --> B["🎯 Discover Your Career Path"]
+    B --> C["🧠 Identify Required Skills"]
+    C --> D["📚 Learn & Develop Skills"]
+    D --> E["💼 Explore Micro-Gigs"]
+    E --> F["💸 Earn & Gain Experience"]
+    F --> G["🏢 Connect With Companies"]
+    G --> H["🎉 Get Hired"]
+```
+
+**Learn → Build → Earn → Grow → Get Hired**
+
+---
+
+## 👥 Built For Everyone
+
+| 🎓 Students & Teenagers | 💼 Job Seekers | 🏢 Companies |
+|---|---|---|
+| Earn through small gigs | Discover career paths | Find skilled talent |
+| Gain early experience | Build professional portfolios | Hire potential employees |
+| Develop useful skills | Improve job readiness | Connect with candidates |
+
+---
+
+## 🎯 Our Vision
+
+We envision a future where opportunities are not limited by age, experience, or background.
+
+A future where students can earn while learning, freshers can gain experience before their first job, and companies can discover talent beyond traditional recruitment.
+
+Ajeya'26 is more than a career platform.
+
+**It's a step towards making opportunities accessible to everyone.**
+
+---
+
+## 🛠️ Tech Stack
+
+<p>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white"/>
+</p>
+
+> Update the technologies above to reflect the actual tools used in the project.
+
+---
+
+## 🚀 Getting Started
+
+Get Ajeya'26 running on your local machine.
+
+```bash
+# Clone the repository
+git clone https://github.com/YOUR-USERNAME/Ajeya-26.git
+
+# Navigate to the project
+cd Ajeya-26
+```
+
+Open the project in **Visual Studio Code** and launch `index.html` using Live Server.
+
+---
+
+## 🔮 What's Next?
+
+Our vision for Ajeya'26 continues to grow.
+
+- 🤖 AI-powered career recommendations
+- 📚 Personalized learning roadmaps
+- 🧾 Smart resume builder
+- 🔐 Verified company profiles
+- 💳 Secure gig payment integration
+- ⭐ Ratings and reviews
+- 🎓 Internship and apprenticeship opportunities
+- 🧩 Skill-based job matching
+
+---
+
+## 🤝 Join the Movement
+
+We believe the next generation deserves better opportunities.
+
+Whether you're a student, a developer, a company, or someone who believes in our mission — Ajeya'26 welcomes you.
+
+If you like our vision, consider giving this repository a ⭐.
+
+---
+
+<p align="center">
+  <strong>🚀 AJEYA'26</strong>
+  <br/>
+  <em>Learn Skills. Earn Early. Get Hired.</em>
+  <br/><br/>
+  Made with ❤️ for the next generation.
+</p>
